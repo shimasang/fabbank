@@ -1,0 +1,16 @@
+{
+	"host":"localhost",
+	"port":"4000",
+	"jwt_expiretime": "36000",
+	"channelName":"interchangechannel",
+	"chainCode":"bankaccountcc",
+	"CC_SRC_PATH":"../artifacts",
+	"keyValueStore":"./data/fabric-client-kvs",
+	"eventWaitTime":"30000",
+	"admins":[
+	   {
+		  "username":"admin",
+		  "secret":"adminpw"
+	   }
+	]
+ }

@@ -1,0 +1,17 @@
+<g-header></g-header>
+
+<mat-card>
+	<mat-card-header>Log in</mat-card-header>
+	<mat-card-content>
+		<form [formGroup]="loginForm" (ngSubmit)="onLogin(loginForm.value,loginForm.valid)">
+		<mat-form-field>
+			<input matInput formControlName="accountId" placeholder="Account Id">
+		</mat-form-field>
+		<button mat-raised-button color='primary'>Log In</button>
+	</form>
+		<div>
+			<a mat-button color="accent" routerLink="/sign_up">Sign Up Now!</a>
+		</div>
+	</mat-card-content>
+</mat-card>
+<simple-notifications [options]="options"></simple-notifications>

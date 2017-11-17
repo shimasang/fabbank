@@ -1,0 +1,44 @@
+<mat-grid-list [ngClass]="(representation? 'positive': 'negative')" cols="11" rowHeight="28px" role="listitem">
+    
+  <!-- section left side header -->
+  <mat-grid-tile [colspan]="1" [rowspan]="2">
+    <div class="header">
+      {{(representation? 'credit': 'debit')}}
+    </div>
+  </mat-grid-tile>
+
+  
+  <!-- section row header. [cols: 10] -->
+  <mat-grid-tile [colspan]="4">
+    <div class="text-left">
+      {{tx.txId}}        
+    </div>
+  </mat-grid-tile>
+  
+  <mat-grid-tile [colspan]="3"></mat-grid-tile>
+
+  <mat-grid-tile class="tx-timestamp" [colspan]="3">
+    {{tx.timestamp * 1000 | date: 'yyyy/MM/dd HH:mm'}}
+  </mat-grid-tile>
+
+
+  <!-- section row body. [cols: 10] -->
+  <mat-grid-tile class="text-left" [colspan]="3">
+    <div class="text-left">
+    FROM:  {{tx.fromBank}}  {{tx.from}}  {{tx.fromName}}
+    </div>
+  </mat-grid-tile>
+
+  <mat-grid-tile class="text-left" [colspan]="3">
+    <div class="text-left">
+     TO:  {{tx.toBank}}  {{tx.to}}  {{tx.toName}}         
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1"></mat-grid-tile>
+  <mat-grid-tile class="text-left" [colspan]="3">
+     {{tx.amount | currency }} / {{tx.balance | currency}}
+  </mat-grid-tile>
+
+      
+
+</mat-grid-list>

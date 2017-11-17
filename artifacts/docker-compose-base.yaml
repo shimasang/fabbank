@@ -1,0 +1,203 @@
+version: '2'
+
+services:
+
+  orderer.bank.com:
+    container_name: orderer.bank.com
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/bank.com/orderers/orderer.bank.com/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/bank.com/orderers/orderer.bank.com/tls/:/var/hyperledger/orderer/tls
+    ports:
+      - 7050:7050
+
+  peer0.member.bank.com:
+    container_name: peer0.member.bank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.member.bank.com
+      - CORE_PEER_ADDRESS=peer0.member.bank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.member.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer0.member.bank.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer0.member.bank.com/tls:/etc/hyperledger/fabric/tls
+        - ../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/chaincode/
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer1.member.bank.com:
+    container_name: peer1.member.bank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.member.bank.com
+      - CORE_PEER_ADDRESS=peer1.member.bank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.member.bank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.member.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer1.member.bank.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer1.member.bank.com/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 7151:7051
+      - 7153:7053
+
+  peer2.member.bank.com:
+    container_name: peer2.member.bank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer2.member.bank.com
+      - CORE_PEER_ADDRESS=peer2.member.bank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.member.bank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.member.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer2.member.bank.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer2.member.bank.com/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 7251:7051
+      - 7253:7053
+    
+  peer3.member.bank.com:
+    container_name: peer3.member.bank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer3.member.bank.com
+      - CORE_PEER_ADDRESS=peer3.member.bank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.member.bank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.member.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer3.member.bank.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer3.member.bank.com/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 7351:7051
+      - 7353:7053
+
+  peer4.member.bank.com:
+    container_name: peer4.member.bank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer4.member.bank.com
+      - CORE_PEER_ADDRESS=peer4.member.bank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.member.bank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.member.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer4.member.bank.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer4.member.bank.com/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 7451:7051
+      - 7453:7053
+
+  peer5.member.bank.com:
+    container_name: peer5.member.bank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer5.member.bank.com
+      - CORE_PEER_ADDRESS=peer5.member.bank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.member.bank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.member.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer5.member.bank.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/member.bank.com/peers/peer5.member.bank.com/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 7551:7051
+      - 7553:7053
+
+  peer0.interchange.bank.com:
+    container_name: peer0.interchange.bank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.interchange.bank.com
+      - CORE_PEER_ADDRESS=peer0.interchange.bank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.interchange.bank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.interchange.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/interchange.bank.com/peers/peer0.interchange.bank.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/interchange.bank.com/peers/peer0.interchange.bank.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  peer1.interchange.bank.com:
+    container_name: peer1.interchange.bank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.interchange.bank.com
+      - CORE_PEER_ADDRESS=peer1.interchange.bank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.interchange.bank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.interchange.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/interchange.bank.com/peers/peer1.interchange.bank.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/interchange.bank.com/peers/peer1.interchange.bank.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 8151:7051
+      - 8153:7053
+
+  peer2.interchange.bank.com:
+    container_name: peer2.interchange.bank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer2.interchange.bank.com
+      - CORE_PEER_ADDRESS=peer2.interchange.bank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.interchange.bank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.interchange.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/interchange.bank.com/peers/peer2.interchange.bank.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/interchange.bank.com/peers/peer2.interchange.bank.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 8251:7051
+      - 8253:7053

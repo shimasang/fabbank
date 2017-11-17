@@ -1,0 +1,45 @@
+<mat-toolbar color="primary" style="margin-bottom: 8px;">Fab Bank Admin</mat-toolbar>
+<h2>Channels</h2>
+<mat-grid-list cols="2" rowHeight="50px">
+	<mat-grid-tile
+		*ngFor="let channel of channels"
+		[colspan]="channel.cols"
+		[rowspan]="channel.rows"
+		style="background-color:aqua;">
+		<p>{{channel.channel.name}}</p>
+	</mat-grid-tile>
+</mat-grid-list>
+
+<h2>Peers</h2>
+<mat-grid-list cols="6" rowHeight="50px">
+	<mat-grid-tile
+		*ngFor="let peer of peers"
+		[colspan]="peer.cols"
+		[rowspan]="peer.rows"
+		style="background-color:blanchedalmond">
+		<p>{{peer.peer}}</p>
+	</mat-grid-tile>
+</mat-grid-list>
+
+<h2>Users</h2>
+<mat-grid-list cols="3" rowHeight="70px">
+	<mat-grid-tile
+		*ngFor="let user of users"
+		[colspan]="user.cols"
+		[rowspan]="user.rows"
+		style="background-color:azure">
+		<p>ID: {{user.user.username}}<br />PW: {{user.user.password}}<br />{{user.user.attribute}}</p>
+	</mat-grid-tile>
+</mat-grid-list>
+
+<h2>Banks</h2>
+<button mat-raised-button (click)="onRegisterBank()">Register Bank</button>
+<mat-grid-list cols="6" rowHeight="50px">
+	<mat-grid-tile
+		*ngFor="let bank of banks"
+		[colspan]="bank.cols"
+		[rowspan]="bank.rows"
+		style="background-color:azure">
+		<p>Code: {{bank.bank.bankcode}}<br />Name: {{bank.bank.bankname}}</p>
+	</mat-grid-tile>
+</mat-grid-list>

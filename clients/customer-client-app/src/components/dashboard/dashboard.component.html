@@ -1,0 +1,13 @@
+<g-header></g-header>
+<mat-card>
+  <div class="user">
+    ACCOUNT ID: {{(account$ | async)?.accountId}} USER: {{(account$ | async)?.username}}
+  </div>
+  <div class="button">
+      <button style="margin-top: 15px;" mat-raised-button (click)="onTransfer()">Transfer Funds</button>      
+  </div>
+
+</mat-card>
+<simple-notifications [options]="options"></simple-notifications>
+
+<app-dashboard-list class="list" *ngFor="let tx of transactions$ | async" [tx]=tx [account]="account$ | async"></app-dashboard-list>

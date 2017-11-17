@@ -1,0 +1,18 @@
+.user {
+  text-align: center;
+}
+
+.balance {
+  text-align: center;
+  font-size: 200%;
+}
+
+.button {
+  text-align: center;
+}
+
+.body-header {
+  position: absolute;
+  left: 0px;
+}
+

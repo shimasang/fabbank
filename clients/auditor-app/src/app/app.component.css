@@ -1,0 +1,6 @@
+.transaction {
+	border: 1px solid black;
+	margin-bottom: 8px;
+	padding: 8px;
+	box-shadow: 4px 4px 4px rgba(0,0,0,0.4);
+}

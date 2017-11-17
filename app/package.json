@@ -1,0 +1,16 @@
+{
+  "name": "fabbank",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fabric-ca-client": "^1.0.1",
+    "fabric-client": "^1.0.1",
+    "log4js": "^0.6.38",
+    "socket.io": "^2.0.4"
+  }
+}

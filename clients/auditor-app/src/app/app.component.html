@@ -1,0 +1,7 @@
+<div class="transaction" *ngFor="let tx of transactions">
+  <p>{{tx.timestamp | date:'full'}} : {{tx.txId}}</p>
+  <p>Account ID: {{tx.value.fromBank}}/{{tx.value.from}} Name: {{tx.value.fromName}}&nbsp;&nbsp;>>>&nbsp;&nbsp;
+  Account ID: {{tx.value.toBank}}/{{tx.value.to}} Name: {{tx.value.toName}}
+  &nbsp;&nbsp;Amount: {{tx.value.amount | currency}}.00</p>
+</div>
+<simple-notifications [options]="options"></simple-notifications>

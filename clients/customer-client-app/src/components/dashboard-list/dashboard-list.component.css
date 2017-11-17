@@ -1,0 +1,28 @@
+.positive {
+  font-family: 'Roboto', sans-serif;
+  color: rgba(0, 0, 0, 0.8);
+  background: linear-gradient(-135deg, hsl(210, 30%, 96%), hsl(208, 40%, 91%));
+  border-bottom: solid 3px #aac5de;
+  border-radius: 9px;
+  margin-top: 5px;
+}
+
+.negative {
+  font-family: 'Roboto', sans-serif;
+  color: rgba(0, 0, 0, 0.8);
+  background: linear-gradient(-135deg, hsl(310, 30%, 96%), hsl(308, 40%, 91%));  
+  border-bottom: solid 3px #aac5de;
+  border-radius: 9px;
+  margin-top: 5px;
+}
+
+.header {
+  font-size: 125%;
+  font-weight: 600;
+}
+
+.text-left {
+  position: absolute;
+  left: 5px;
+}
+

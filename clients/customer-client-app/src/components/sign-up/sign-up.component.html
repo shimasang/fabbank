@@ -1,0 +1,24 @@
+<g-header></g-header>
+<mat-card>
+	<mat-card-header>Sign Up</mat-card-header>
+	<mat-card-content>
+		<form [formGroup]="signUpForm" (ngSubmit)="onSignUp(signUpForm.value,signUpForm.valid)">
+		<mat-list>
+			<mat-list-item>
+				<mat-form-field>
+					<input matInput formControlName="accountId" placeholder="Account Id">
+				</mat-form-field>
+			</mat-list-item>
+			<mat-list-item>
+				<mat-form-field>
+					<input matInput formControlName="username" placeholder="User Name">
+				</mat-form-field>
+			</mat-list-item>
+			<mat-list-item>
+					<button mat-raised-button color="primary">Apply New Account</button>
+			</mat-list-item>
+		</mat-list>
+		</form>
+	</mat-card-content>
+</mat-card>
+<simple-notifications [options]="options"></simple-notifications>

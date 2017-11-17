@@ -1,0 +1,171 @@
+version: '2'
+
+networks:
+  bank:
+
+services:
+  ca.org1.bank.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.member.bank.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/7fc7d19f113b2409abe69145c73473c5ba985fda0abb7c9b9cf1ac64b8c32faf_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.member.bank.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/7fc7d19f113b2409abe69145c73473c5ba985fda0abb7c9b9cf1ac64b8c32faf_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/member.bank.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerOrg1
+
+  ca.org2.bank.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.interchange.bank.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/d6cecb0c05bcf2ca50a44c7369b1e240bb467215ce7985cb4a30398ddc39a440_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.interchange.bank.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/d6cecb0c05bcf2ca50a44c7369b1e240bb467215ce7985cb4a30398ddc39a440_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/interchange.bank.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerOrg2
+
+  orderer.bank.com:
+    extends:
+      file:   docker-compose-base.yaml
+      service: orderer.bank.com
+    container_name: orderer.bank.com
+    networks:
+      - bank
+
+  peer0.member.bank.com:
+    container_name: peer0.member.bank.com
+    extends:
+      file:  docker-compose-base.yaml
+      service: peer0.member.bank.com
+    networks:
+      - bank
+
+  peer1.member.bank.com:
+    container_name: peer1.member.bank.com
+    extends:
+      file:  docker-compose-base.yaml
+      service: peer1.member.bank.com
+    networks:
+      - bank
+    depends_on:
+      - orderer.bank.com
+      - peer0.member.bank.com
+
+  peer2.member.bank.com:
+    container_name: peer2.member.bank.com
+    extends:
+      file:  docker-compose-base.yaml
+      service: peer2.member.bank.com
+    networks:
+      - bank
+    depends_on:
+      - orderer.bank.com
+      - peer0.member.bank.com
+
+  peer3.member.bank.com:
+    container_name: peer3.member.bank.com
+    extends:
+      file:  docker-compose-base.yaml
+      service: peer3.member.bank.com
+    networks:
+      - bank
+    depends_on:
+      - orderer.bank.com
+      - peer0.member.bank.com
+
+  peer4.member.bank.com:
+    container_name: peer4.member.bank.com
+    extends:
+      file:  docker-compose-base.yaml
+      service: peer4.member.bank.com
+    networks:
+      - bank
+    depends_on:
+      - orderer.bank.com
+      - peer0.member.bank.com
+
+  peer5.member.bank.com:
+    container_name: peer5.member.bank.com
+    extends:
+      file:  docker-compose-base.yaml
+      service: peer5.member.bank.com
+    networks:
+      - bank
+    depends_on:
+      - orderer.bank.com
+      - peer0.member.bank.com
+
+  peer0.interchange.bank.com:
+    container_name: peer0.interchange.bank.com
+    extends:
+      file:  docker-compose-base.yaml
+      service: peer0.interchange.bank.com
+    networks:
+      - bank
+    depends_on:
+      - orderer.bank.com
+
+  peer1.interchange.bank.com:
+    container_name: peer1.interchange.bank.com
+    extends:
+      file:  docker-compose-base.yaml
+      service: peer1.interchange.bank.com
+    networks:
+      - bank
+    depends_on:
+      - orderer.bank.com
+      - peer0.interchange.bank.com
+
+  peer2.interchange.bank.com:
+    container_name: peer2.interchange.bank.com
+    extends:
+      file:  docker-compose-base.yaml
+      service: peer2.interchange.bank.com
+    networks:
+      - bank
+    depends_on:
+      - orderer.bank.com
+      - peer0.interchange.bank.com
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.member.bank.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/member.bank.com/peers/peer0.member.bank.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/member.bank.com/peers/peer0.member.bank.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/member.bank.com/peers/peer0.member.bank.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/member.bank.com/users/Admin@member.bank.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer.bank.com
+      - peer0.member.bank.com
+    networks:
+      - bank
+
